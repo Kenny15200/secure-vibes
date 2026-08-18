@@ -1,13 +1,13 @@
-name = "long-wave-c3f3"
+name = "secure-vibes"
 main = "worker.js"
 compatibility_date = "2026-08-17"
 
 # Wrangler v3.109.0+ warns that the top-level `name` field should be kept consistent
-# with the deployed worker/project name. This file intentionally matches the existing
-# Cloudflare worker URL: https://long-wave-c3f3.sso-login-portal.workers.dev/
+# with the deployed worker/project name. This file matches the current Cloudflare
+# worker URL: https://secure-vibes.sso-login-portal.workers.dev/
 
 [vars]
-# Set these secrets in Cloudflare Dashboard > Workers & Pages > long-wave-c3f3 > Settings > Variables
+# Set these secrets in Cloudflare Dashboard > Workers & Pages > secure-vibes > Settings > Variables
 # or via wrangler secret put.
 
 [env.production]

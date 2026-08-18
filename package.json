@@ -1,0 +1,11 @@
+{
+  "name": "secure-vibes",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler pages dev .",
+    "deploy": "wrangler pages deploy . --project-name=secure-vibes"
+  },
+  "devDependencies": {
+    "wrangler": "^3.107.3"
+  }
+}

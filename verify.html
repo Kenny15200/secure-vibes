@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phone Verification</title>
+
+<style>
+/* Basic body styling */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url('your-background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Main Card */
+.form-wrapper {
+    background: #ffffff;
+    padding: 35px;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+    min-width: 350px;
+    text-align: center;
+    border: 3px solid #00a651;
+}
+
+/* Image */
+.verify-image {
+    width: 200px;
+    margin-bottom: 15px;
+}
+
+/* Heading */
+h2 {
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+/* Phone input container */
+.phone-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 7px;
+    margin-bottom: 15px;
+}
+
+/* Phone input boxes */
+.phone-inputs input {
+    width: 60px;
+    padding: 10px;
+    font-size: 16px;
+    text-align: center;
+    border: 2px solid #00a651;
+    border-radius: 5px;
+    outline: none;
+}
+
+.phone-inputs input:focus {
+    box-shadow: 0 0 5px rgba(0,166,81,0.4);
+}
+
+/* Hidden label for screen readers */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+}
+
+/* Disclaimer text */
+.disclaimer {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* Buttons container */
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+/* Buttons */
+button {
+    padding: 8px 18px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Go Back button */
+.back-btn {
+    border: 1px solid #ccc;
+    background: #f5f5f5;
+    color: #333;
+}
+
+.back-btn:hover {
+    background: #e5e5e5;
+}
+
+/* Submit button */
+.submit-btn {
+    border: 1px solid #00a651;
+    background: #00a651;
+    color: #ffffff;
+}
+
+.submit-btn:hover {
+    background: #007f3c;
+    border-color: #007f3c;
+}
+
+/* Focus style for buttons (accessibility) */
+button:focus {
+    outline: 2px dashed #00a651;
+    outline-offset: 2px;
+}
+
+/* Responsive adjustments */
+@media(max-width: 400px) {
+    .phone-inputs input {
+        width: 18%;
+        min-width: 45px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="form-wrapper">
+
+    <!-- Image -->
+    <img src="lock.jpeg" 
+         alt="Phone Verification" 
+         class="verify-image">
+
+    <h2>Enter Your Registered Phone Number To Continue</h2>
+
+    <form method="POST" action="verify.php">
+
+        <div class="phone-inputs">
+            <label>
+                <span class="sr-only">Area code</span>
+                <input type="tel" name="part1" maxlength="3" pattern="\d{3}" required>
+            </label>
+            <label>
+                <span class="sr-only">Central office code</span>
+                <input type="tel" name="part2" maxlength="3" pattern="\d{3}" required>
+            </label>
+            <label>
+                <span class="sr-only">Line number</span>
+                <input type="tel" name="part3" maxlength="4" pattern="\d{4}" required>
+            </label>
+        </div>
+
+        <p class="disclaimer">
+            Please be advised that we do not guarantee the delivery of alerts.<br>
+            Receipt of alerts may be delayed or prevented by <br>factors affecting your mobile service provider.
+        </p>
+
+        <div class="button-group">
+            <button type="button" class="back-btn" onclick="window.history.back()">Go Back</button>
+            <button type="submit" class="submit-btn">Submit</button>
+        </div>
+
+        <input type="hidden" name="step" value="verify">
+
+    </form>
+
+</div>
+
+<script>
+// Auto-tab between inputs
+const inputs = document.querySelectorAll('.phone-inputs input');
+inputs.forEach((input, i) => {
+    input.addEventListener('input', () => {
+        if (input.value.length === input.maxLength && i < inputs.length - 1) {
+            inputs[i + 1].focus();
+        }
+    });
+});
+</script>
+
+</body>
+</html>

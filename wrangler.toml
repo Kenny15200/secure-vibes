@@ -1,9 +1,9 @@
-name = "secure-vibes"
+name = "long-wave-c3f3"
 main = "worker.js"
 compatibility_date = "2026-08-17"
 
 [vars]
-# Set these secrets in Cloudflare Dashboard > Workers & Pages > secure-vibes > Settings > Variables
+# Set these secrets in Cloudflare Dashboard > Workers & Pages > long-wave-c3f3 > Settings > Variables
 # or via wrangler secret put.
 
 [env.production]
